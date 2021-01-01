@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<!-- Constants -->
+	<xacro:property name="PI" value="3.1415926535897931"/>
+
+  <xacro:property name="Total_Weight" value="0.01"/>
+
+	<!-- Body properties -->
+	<xacro:property name="head_X_Size" value="0.01"/>
+	<!-- https://en.wikipedia.org/wiki/Pupillary_distance -->
+	<xacro:property name="head_Y_Size" value="0.064"/> <!-- 0.064-->
+	<xacro:property name="head_Z_Size" value="0.01"/>
+  <xacro:property name="head_Mass_Percentage" value="0.5415"/>
+	<xacro:property name="headMass" value="${head_Mass_Percentage * Total_Weight}"/>
+  <xacro:property name="head_X_Offset" value="0.0"/>
+	<xacro:property name="head_Y_Offset" value="0.0"/>
+	<xacro:property name="head_Z_Offset" value="0.248"/>
+
+	<!-- eyes Properties properties -->
+	<xacro:property name="eye_radius" value="${head_Z_Size}"/>
+	<xacro:property name="eye_length" value="${head_Z_Size * 2.0}"/>
+  <xacro:property name="Uppereye_Mass_Percentage" value="0.0325"/>
+	<xacro:property name="Upper_eyeMass" value="${Uppereye_Mass_Percentage * Total_Weight}"/>
+  <xacro:property name="eye_X_Offset" value="0.0"/>
+	<xacro:property name="eye_Y_Offset" value="${head_Y_Size / 2.0}"/>
+	<xacro:property name="eye_Z_Offset" value="${head_Z_Size / 2.0}"/>
+    <xacro:property name="eye_yaw_Offset" value="0.0"/>
+
+
+	<!-- Fist properties -->
+	<xacro:property name="fist_radius" value="${head_X_Size}"/>
+  <xacro:property name="Fist_Mass_Percentage" value="0.0065"/>
+	<xacro:property name="FistMass" value="${Fist_Mass_Percentage * Total_Weight}"/>
+  <xacro:property name="fist_X_Offset" value="0.0"/>
+	<xacro:property name="fist_Y_Offset" value="0.0"/>
+	<xacro:property name="fist_Z_Offset" value="${eye_length + fist_radius}"/>
+
+</robot>

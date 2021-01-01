@@ -1,0 +1,235 @@
+<?xml version = "1.0" ?>
+<robot name = "jacky" xmlns:xacro = "http://www.ros.org/wiki/xacro">
+  <!-- include the xacro files -->
+  <xacro:include filename = "$(find elsia)/urdf/jacky_materials.xacro"/>
+  <xacro:include filename = "$(find elsia)/urdf/jacky.gazebo"/>
+
+  <!-- xacro files from the stereocam_test_description -->
+  <!-- Inertia matrices -->
+  <xacro:include filename="$(find elsia)/urdf/macros.xacro" />
+  <!-- Robot constants and properties -->
+  <xacro:include filename="$(find elsia)/urdf/contact_robot_properties.xacro" />
+  <!-- Body -->
+  <xacro:include filename="$(find elsia)/urdf/head.xacro" />
+  <!-- Arms -->
+  <xacro:include filename="$(find elsia)/urdf/eyes.xacro" />
+  <xacro:include filename="$(find elsia)/urdf/eyesUpward.xacro" />
+
+  <!-- define a dummy link -->
+  <link name = "base_link"/>
+
+
+  <!-- first link -->
+  <link name="link_jacky_chassis">
+    <inertial>
+      <orign rpy = "0 0 0" xyz = "0 0 0.16"/>
+      <mass value = "5.67"/>
+      <inertia ixx = "0.07" ixy = "0" ixz = "0" iyy = "0.08" iyz = "0" izz = "0.10"/>
+    </inertial>
+    <collision name="collision">
+      <geometry>
+        <box size = "0.445 0.277 0.17"/>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh filename="package://elsia/meshes/chassis.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- define the castor -->
+  <link name = "link_castor">
+    <inertial>
+      <mass value = "0.5"/>
+      <inertia ixx = "0.0000064" ixy = "0" ixz = "0" iyy = "0.0000064" iyz = "0" izz = "0.0000064"/>
+    </inertial>
+    <collision name = "collision">
+      <geometry>
+        <sphere radius = "0.04"/>
+      </geometry>
+    </collision>
+    <surface>
+      <friction>
+        <ode>
+          <mu>0.0</mu>
+          <mu2>0.0</mu2>
+          <slip1>0.0</slip1> <!--1.0 -->
+          <slip2>0.0</slip2> <!--1.0 -->
+        </ode>
+      </friction>
+    </surface>
+    <visual>
+      <geometry>
+        <sphere radius = "0.04"/>
+      </geometry>
+      <material name = "white"/>
+    </visual>
+  </link>
+
+  <!--  define a fixed joint-->
+  <joint name = "castor_joint" type = "fixed">
+    <origin rpy = "0 0 0" xyz = "-0.2 0 -0.16"/>
+    <parent link = "link_jacky_chassis"/>
+    <child link = "link_castor"/>
+  </joint>
+
+  <!-- define the base_joint -->
+  <joint name = "base_joint" type = "fixed">
+    <!-- <orign rpy = "0 0 3.14159265" xyz = "0 0 0"/> -->
+    <parent link = "base_link"/>
+    <child link = "link_jacky_chassis"/>
+  </joint>
+
+  <!-- define the right wheel -->
+  <link name="link_jacky_right_wheel">
+    <pose>0 0 0 0 0 0</pose>
+    <inertial>
+      <mass value = "1.5"/>
+      <inertia ixx = "0.0051" ixy = "0.0" ixz = "0.0"
+        iyy = "0.0051" iyz = "0.0" izz = "0.0090"/>
+    </inertial>
+    <collision name="collision">
+      <geometry>
+        <cylinder radius = "0.11" length = "0.05"/>
+      </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>100000.0</mu>
+            <mu2>100000.0</mu2>
+            <slip1>0.0</slip1> <!-- 0.0 -->
+            <slip2>0.0</slip2> <!-- 0.0 -->
+          </ode>
+        </friction>
+      </surface>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <cylinder radius = "0.11" length = "0.05"/>
+      </geometry>
+      <material name = "white"/>
+    </visual>
+  </link>
+
+  <!-- define a joint with respect to the link_jacky_chassis-->
+ <joint name="joint_right_wheel" type="continuous">
+   <parent link="link_jacky_chassis"/>
+   <child link="link_jacky_right_wheel"/>
+   <axis xyz="0 0 1"/>
+   <origin rpy = "-1.5707 0 0" xyz="0.1 -0.17 -0.09"/>
+ </joint>
+
+ <!-- define the left wheel wheel -->
+ <link name="link_jacky_left_wheel">
+   <pose>0 0 0 0 0 0</pose>
+   <inertial>
+     <mass value = "1.5"/>
+     <inertia ixx = "0.0051" ixy = "0.0" ixz = "0.0"
+       iyy = "0.0051" iyz = "0.0" izz = "0.0090"/>
+   </inertial>
+   <collision name="collision">
+     <geometry>
+       <cylinder radius = "0.11" length = "0.05"/>
+     </geometry>
+     <surface>
+       <friction>
+         <ode>
+           <mu>100000.0</mu>
+           <mu2>100000.0</mu2>
+           <slip1>0.0</slip1> <!-- 0.0 -->
+           <slip2>0.0</slip2> <!-- 0.0 -->
+         </ode>
+       </friction>
+     </surface>
+   </collision>
+   <visual name="visual">
+     <geometry>
+       <cylinder radius = "0.11" length = "0.05"/>
+     </geometry>
+     <material name = "white"/>
+   </visual>
+ </link>
+
+ <!-- define a joint with respect to the link_jacky_chassis-->
+ <joint name="joint_left_wheel" type="continuous">
+   <parent link="link_jacky_chassis"/>
+   <child link="link_jacky_left_wheel"/>
+   <axis xyz="0 0 1"/>
+   <origin rpy = "-1.5707 0 0" xyz="0.1 0.17 -0.09"/>
+ </joint>
+
+ <!-- Code for adding stereo camera -->
+ <!-- origin_xyz = "0.0 0.0 0.75" use this for original aisle odometry -->
+<!-- working setting for act prop 0.1 0.0 1.25-->
+ <body number = "C" origin_rpy = "0 0 0" origin_xyz = "0.1 0.0 1.25"/> <!-- origin_xyz = "0.2 0 0.1 --> <!--0.22 0.0 0.1-->
+ <eye parent = "head_C" lr = "left" tY = "-1"/>
+ <eye parent = "head_C" lr = "right" tY = "1"/>
+
+
+ <!-- origin_xyz = "0.0 0.0 0.85" use this for original aisle odometry -->
+<!-- working setting for act prop 0.0 0.0 0.15-->
+ <body number = "U" origin_rpy = "0 -1.5708 0" origin_xyz = "0.0 0.0 2.5"/> <!-- origin_xyz = "0.2 0 0.1 ,,,,0 0 0.15 -->
+ <eye_upward parent = "head_U" lr = "left_upward" tY = "-1"/>
+ <eye_upward parent = "head_U" lr = "right_upward" tY = "1"/>
+
+  <!-- Imu -->
+  <link name = "imu_link">
+    <collision>
+      <origin xyz = "0 0 0" rpy = "0 0 0"/>
+      <geometry>
+        <box size = "0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz = "0 0 0" rpy = "0 0 0"/>
+      <geometry>
+        <box size = "0.02 0.02 0.02"/>
+      </geometry>
+      <material name = "white"/>
+    </visual>
+    <inertial>
+      <mass value = "0.001"/>
+      <origin xyz = "0 0 0" rpy = "0 0 0"/>
+      <inertia ixx="0.00000015" ixy="0" ixz="0" iyy="0.00000015" iyz="0" izz="0.00000015" />
+    </inertial>
+  </link>
+
+  <joint name = "imu_sensor_joint" type = "fixed">
+    <axis xyz = "0 0 1"/>
+    <origin xyz = "0 0 0" rpy = "0 0 0"/>
+    <parent link = "link_jacky_chassis"/>
+    <child link = "imu_link"/>
+  </joint>
+
+  <!--laser sensor -->
+  <link name="hokuyo_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://elsia/meshes/hokuyo.dae"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <joint name = "hokuyo_joint" type = "fixed">
+    <axis xyz = "0 1 0"/>
+    <!--  use 0 0 0.6 for original aisle odom code -->
+    <origin xyz = "0 0 0.1" rpy = "0 0 0"/>
+    <parent link = "base_link"/>
+    <child link = "hokuyo_link"/>
+  </joint>
+</robot>

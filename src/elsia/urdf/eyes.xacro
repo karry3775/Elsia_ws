@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="eye" params="parent lr tY">
+
+
+    <link name="${lr}"> <!-- ${parent}_${lr}_eye -->
+      <collision>
+        <origin xyz="0 0 ${eye_length/2.0}"
+        		rpy="0 0 0" />
+        <geometry>
+            <box size="${eye_length} ${eye_radius} ${eye_radius}"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 ${eye_length/2.0}"
+        		rpy="0 0 0" />
+        <geometry>
+          <box size="${eye_length} ${eye_radius} ${eye_radius}"/>
+        </geometry>
+        <material name="green"/>
+      </visual>
+
+      <inertial>
+        <origin xyz="0 0 ${eye_length/2.0}"
+        		rpy="0 0 0" />
+        <mass value="${Upper_eyeMass}"/>
+        <box_inertia
+          m="${Upper_eyeMass}"
+          x="${eye_length}"
+          y="${eye_radius}"
+          z="${eye_radius}"/>
+      </inertial>
+    </link>
+
+    <gazebo reference="${lr}"> <!-- ${parent}_${lr}_eye -->
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <kp>10000000.0</kp>
+      <kd>10000000.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>1.0</maxVel>
+      <material>Gazebo/Green</material>
+    </gazebo>
+
+
+    <joint name="${lr}" type="fixed"> <!-- ${parent}_${lr}_eye_hinge -->
+      <parent link="${parent}"/>
+      <child link="${lr}"/> <!-- ${parent}_${lr}_eye -->
+      <origin
+        xyz = "${eye_X_Offset} ${-tY*(eye_Y_Offset)} ${eye_Z_Offset}"
+        rpy = "-1.5708  0 -1.5708" /> <!-- rpy = "0 0 ${eye_yaw_Offset}"  -->
+    </joint>
+
+
+    <gazebo reference="${lr}"> <!-- ${parent}_${lr}_eye -->
+      <sensor type="camera" name="camera_${lr}"> <!-- {parent}_${lr}_eye -->
+        <update_rate>10.0</update_rate>
+        <camera name="${lr}"> <!-- ${parent}_${lr}_eye_cam -->
+
+            <pose>0 0 0 0 -1.5708 1.5708 </pose> <!-- the pose will be determined by this I guess  -1.5708 1.5708 0-->
+
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>400</width>
+            <height>400</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>300</far> <!-- 100 -->
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <stddev>0</stddev> <!--0.007-->
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate> <!-- 0 -->
+          <cameraName>stereo/${lr}</cameraName> <!--${parent}_${lr}-->
+          <imageTopicName>image_rect</imageTopicName> <!-- image_raw -->
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>${lr}</frameName> <!-- ${parent}_${lr}_eye -->
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

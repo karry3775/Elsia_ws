@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="body" params = "number origin_xyz origin_rpy">
+
+    <link name='head_${number}'>
+      <inertial>
+        <origin xyz="0 0 ${head_Z_Size/2.0}"
+          rpy="0 0 0" />
+        <mass value="${headMass}"/>
+        <box_inertia
+          m="${headMass}"
+          x="${head_X_Size}"
+          y="${head_Y_Size}"
+          z="${head_Z_Size}"/>
+      </inertial>
+      <collision>
+        <origin xyz="0 0 ${head_Z_Size/2.0}"
+                rpy="0 0 0" />
+        <geometry>
+          <box size="${head_X_Size} ${head_Y_Size} ${head_Z_Size}"/>
+        </geometry>
+      </collision>
+      <visual>
+        <origin xyz="0 0 ${head_Z_Size/2.0}"
+        		rpy="0 0 0" />
+        <geometry>
+          <box size="${head_X_Size} ${head_Y_Size} ${head_Z_Size}"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
+    </link>
+
+    <gazebo reference="head_${number}">
+      <mu1>0.01</mu1>
+      <mu2>0.01</mu2>
+      <kp>100000.0</kp>
+      <kd>1000000.0</kd>
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+    <joint name="head_joint_${number}" type="fixed">
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <parent link="link_jacky_chassis" />
+      <child link="head_${number}" />
+    </joint>
+
+  </xacro:macro>
+
+</robot>
