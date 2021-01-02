@@ -9,7 +9,7 @@
   <arg name = "debug" default = "false"/>
   <arg name = "gui" default = "true"/>
   <arg name = "pause" default = "true"/>
-  <arg name = "world" default = "$(find elsia)/world/jacky_world.world"/>
+  <arg name = "world" default = "$(find elsia)/world/isolated_aisles_environment.world"/>
 
   <!-- add the gazebo launcher -->
   <include file = "$(find gazebo_ros)/launch/empty_world.launch">
