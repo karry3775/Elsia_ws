@@ -7,6 +7,9 @@ state estimates that are drift free in a local sense. <br/>
 We call this method
 **ELSIA**  which is short for **E**xploitative **L**ocalization using **S**tructure **I**nside **A**isles.
 
+## Cloning the repo with submodules
+```git clone --recurse-submodules git@github.com:karry3775/Elsia_ws.git```
+
 ## Environment setup
 - Copy the environment models inside ```~/.gazebo/models```
 
@@ -22,3 +25,5 @@ We call this method
 - Open up the teleoperation code (this needs to be done in sudo mode as per the requirements of keyboard module in python)
     - ```$ cd && sudo su ```
     - ```$ source Documents/Elsia_ws/devel/setup.bash && rosrun elsia jacky_teleoperate.py```
+- Initiate Block Counting
+    - ```$ rosrun elsia block_counting.py```
