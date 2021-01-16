@@ -22,9 +22,9 @@ We call this method
 
 ### Codes to run
 - Spawn robot in an environment
-    - ```roslaunch elsia jacky_spawn.launch world_name:=isolated_aisles``` (OR)
-    - ```roslaunch elsia jacky_spawn.launch world_name:=multiple_aisles``` (OR)
-    - ```roslaunch elsia jacky_spawn.launch world_name:=warehouse_like```
+    - ```roslaunch elsia simulation.launch world:=isolated_aisles``` (OR)
+    - ```roslaunch elsia simulation.launch world:=multiple_aisles``` (OR)
+    - ```roslaunch elsia simulation.launch world:=warehouse_like```
 - Open up the teleoperation code (this needs to be done in sudo mode as per the requirements of keyboard module in python)
     - ```cd && sudo su ```
     - ```source Documents/Elsia_ws/devel/setup.bash && rosrun elsia jacky_teleoperate.py```
