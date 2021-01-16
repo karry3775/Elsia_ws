@@ -1,0 +1,15 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<launch>
+  <!-- Launch the simulation with correct world arguments -->
+  <!-- options for $(arg world) are isolated_aisles, mutiple_aisles and warehouse_like-->
+  <arg name="world" default="isolated_aisles"/>
+  <include file="$(find elsia)/launch/jacky_spawn.launch">
+    <arg name="world_name" value="$(arg world)"/>
+  </include>
+
+  <!-- Launch the rviz file -->
+  <include file="$(find elsia)/launch/jacky_rviz.launch"/>
+
+  <!-- Launch rf2o -->
+  <include file="$(find rf2o_laser_odometry)/launch/rf2o_laser_odometry.launch"/>
+</launch>
