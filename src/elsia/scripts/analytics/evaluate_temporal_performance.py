@@ -21,8 +21,7 @@ import numpy
 import argparse
 import os
 
-rf2o_odom_update_interval = None
-rf2o_first_message = True
+rf2o_odom_updates = []
 
 def parseArgs():
     parser = argparse.ArgumentParser()
@@ -42,16 +41,27 @@ def parseArgs():
 
 # callback function for rf2o odometry
 def rf2oCb(msg):
-    global rf2o_first_message
-    global rf2o_odom_update_interval
+    global rf2o_odom_updates
 
     t = msg.header.stamp.to_sec()
+    rf2o_odom_updates.append(t)
+   
 
-    if rf2o_first_message:
-        rf2o_first_message = False
-        rf2o_odom_update_interval = [t]
-    else:
-        rf2o_odom_update_interval.append(t - rf2o_odom_update_interval[-1])
+
+def getUpdateInterval():
+    if len(rf2o_odom_updates) == 0 :
+        print("No data found! Aborting")
+        exit(1)
+
+    rf2o_odom_update_interval = []
+    # get updates from rf2o_odom_updates
+    for i in range(1, len(rf2o_odom_updates)):
+        rf2o_odom_update_interval.append(
+            rf2o_odom_updates[i] - rf2o_odom_updates[i-1]
+            )
+
+    return rf2o_odom_update_interval
+    
 
 # function to plot the temporal peformance
 # i.e how much time it takes to produce odometry 
@@ -70,9 +80,7 @@ def plotTemporalPerformance(out_dir):
     rcParams.update(params)
     grid()
 
-    if rf2o_odom_update_interval is None:
-        print("Cannot plot None! Aborting")
-        exit(1)
+    rf2o_odom_update_interval = getUpdateInterval()
 
     plot(np.arange(len(rf2o_odom_update_interval)), rf2o_odom_update_interval,
          linewidth=2, color='r')
