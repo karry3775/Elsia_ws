@@ -19,6 +19,9 @@ We call this method
 ## Dependencies
 - keyboard module python
     - ``` sudo su && pip install keyboard```
+- latex
+    - ```sudo apt install texlive-fonts-recommended texlive-fonts-extra```
+    - ```sudo apt install dvipng```
 
 ### Codes to run
 - Spawn robot in an environment
