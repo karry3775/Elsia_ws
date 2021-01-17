@@ -12,12 +12,12 @@ import math as m
 # initialize the node
 rospy.init_node("block_counting_act_prop_node")
 
-block_pub = rospy.Publisher("/block_val", String, queue_size = 10)
+block_pub = rospy.Publisher("/block_val", String, queue_size=10)
 
 sav_cnt = 0
-block_array = [] # it now has to be a 3 tuple [x, y, l/r](actually a list, because mutable)
+# it now has to be a 3 tuple [x, y, l/r](actually a list, because mutable)
+block_array = []
 global_x = 0
-
 
 
 def update_blocks(cv_image, x, y, l_r):
@@ -26,16 +26,18 @@ def update_blocks(cv_image, x, y, l_r):
     if len(block_array) == 0:
         block_array.append([x, y, l_r])
         print("y value is: {} and block array is : {}".format(y, block_array))
-        msg = str(len(block_array)) + "," +  str(block_array[-1][0]) + ","  + block_array[-1][2] + "," +  str(block_array[-1][0]) + ","  + block_array[-1][2]#  (block_count, x1, l_r1, x0, l_r0)
+        msg = str(len(block_array)) + "," + str(block_array[-1][0]) + "," + block_array[-1][2] + "," + str(
+            block_array[-1][0]) + "," + block_array[-1][2]  # (block_count, x1, l_r1, x0, l_r0)
         prev = (0, int(y))
         next = (400, int(y))
         cv2.line(cv_image, prev, next, (0, 255, 255), 2)
         # also plot the vertical line
-        cv2.line(cv_image, (int(block_array[-1][0]), 0), (int(block_array[-1][0]), 400), (125,0,125), 2)
+        cv2.line(cv_image, (int(block_array[-1][0]), 0),
+                 (int(block_array[-1][0]), 400), (125, 0, 125), 2)
         block_pub.publish(msg)
         return cv_image
     # otherwise find the one to update or append new
-    thresh = 40#20#15#10 # in pixel
+    thresh = 40  # 20#15#10 # in pixel
     if (block_array[-1][1] - y) > thresh:
         # this suggests a new block and hence append
         block_array.append([x, y, l_r])
@@ -49,34 +51,42 @@ def update_blocks(cv_image, x, y, l_r):
 
     print("y value is: {} and block array is : {}".format(y, block_array))
     if len(block_array) >= 2:
-        msg = str(len(block_array)) + "," +  str(block_array[-1][0]) + ","  + block_array[-1][2] + "," +  str(block_array[-2][0]) + ","  + block_array[-2][2] # (block_count, x1, l_r1, x0, l_r0)
+        msg = str(len(block_array)) + "," + str(block_array[-1][0]) + "," + block_array[-1][2] + "," + str(
+            block_array[-2][0]) + "," + block_array[-2][2]  # (block_count, x1, l_r1, x0, l_r0)
     else:
-        msg = str(len(block_array)) + "," +  str(block_array[-1][0]) + ","  + block_array[-1][2] + "," +  str(block_array[-1][0]) + ","  + block_array[-1][2]#  (block_count, x1, l_r1, x0, l_r0)
+        msg = str(len(block_array)) + "," + str(block_array[-1][0]) + "," + block_array[-1][2] + "," + str(
+            block_array[-1][0]) + "," + block_array[-1][2]  # (block_count, x1, l_r1, x0, l_r0)
 
     prev = (0, int(block_array[-1][1]))
     next = (400, int(block_array[-1][1]))
     cv2.line(cv_image, prev, next, (0, 255, 255), 2)
     # also plot the vertical line
-    cv2.line(cv_image, (int(block_array[-1][0]), 0), (int(block_array[-1][0]), 400), (125,0,125), 2)
+    cv2.line(cv_image, (int(block_array[-1][0]), 0),
+             (int(block_array[-1][0]), 400), (125, 0, 125), 2)
 
     block_pub.publish(msg)
     return cv_image
+
 
 def puttext(img, text):
     # text properties
     font = cv2.FONT_HERSHEY_SIMPLEX
     org = (50, 50)
     fontScale = 0.5
-    color = (255,0,0)
+    color = (255, 0, 0)
     thickness = 2
 
-    img = cv2.putText(img, text, org, font, fontScale, color, thickness, cv2.LINE_AA)
+    img = cv2.putText(img, text, org, font, fontScale,
+                      color, thickness, cv2.LINE_AA)
     return img
 
+
 def find_contours(img, edges):
-    _, contours, hierarchy = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(img, contours, -1, (255,255,255), 2)
+    _, contours, hierarchy = cv2.findContours(
+        edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    cv2.drawContours(img, contours, -1, (255, 255, 255), 2)
     return img
+
 
 def img_cb(msg):
     global sav_cnt, block_array
@@ -93,7 +103,7 @@ def img_cb(msg):
 
         # apply erosion to thresholded image
         kernel = np.ones((3, 3), np.uint8)
-        eroded = cv2.erode(thresh2, kernel, iterations = 1)
+        eroded = cv2.erode(thresh2, kernel, iterations=1)
 
         # find edges
         edges = cv2.Canny(gray, 80, 120)
@@ -106,10 +116,9 @@ def img_cb(msg):
         # use contoured img to get the lines in bottom half using HoughLines and not HoughLinesP
         contoured_img_gray = cv2.cvtColor(contoured_img, cv2.COLOR_BGR2GRAY)
         mask = np.zeros_like(contoured_img_gray)
-        mask[int((2*mask.shape[1])/3) :, :] = 255
-        masked_img = cv2.bitwise_and(edges, edges, mask = mask)
+        mask[int((2*mask.shape[1])/3):, :] = 255
+        masked_img = cv2.bitwise_and(edges, edges, mask=mask)
         lines_angled = cv2.HoughLines(masked_img, 1, m.pi/180, 75)
-
 
         line_factor = 500
         left_theta = []
@@ -146,7 +155,7 @@ def img_cb(msg):
                 x2 = int(x0 - line_factor*(-b))
                 y2 = int(y0 - line_factor*(a))
 
-                cv2.line(cv_image,(x1,y1),(x2,y2),(0,0,255),2)
+                cv2.line(cv_image, (x1, y1), (x2, y2), (0, 0, 255), 2)
 
             if len(right_theta) != 0:
                 right_theta_avg = sum(right_theta) / len(right_theta)
@@ -160,8 +169,7 @@ def img_cb(msg):
                 x2 = int(x0 - line_factor*(-b))
                 y2 = int(y0 - line_factor*(a))
 
-                cv2.line(cv_image,(x1,y1),(x2,y2),(0,125,125),2)
-
+                cv2.line(cv_image, (x1, y1), (x2, y2), (0, 125, 125), 2)
 
         """
         vertical lines detection
@@ -187,7 +195,7 @@ def img_cb(msg):
                 lines_drawn.append(pt2)
 
         # sort the lines_drawn pts
-        lines_drawn.sort(key = lambda x:x[0])
+        lines_drawn.sort(key=lambda x: x[0])
         # print("{} vertical lines were detected: and they are \n {}".format(len(lines_drawn), lines_drawn))
         lines_drawn_new = [n for n in lines_drawn if n[1] > 200]
         # print("new points are : \n {}".format(lines_drawn_new))
@@ -203,16 +211,19 @@ def img_cb(msg):
 
         if left_theta_avg != None:
             slop_left = m.tan(m.pi/2 + left_theta_avg)
-            intercept_left = -(slop_left * left_rho_avg) / m.cos(left_theta_avg)
+            intercept_left = -(slop_left * left_rho_avg) / \
+                m.cos(left_theta_avg)
         if right_theta_avg != None:
             slop_right = m.tan(m.pi/2 + right_theta_avg)
-            intercept_right = -(slop_right * right_rho_avg) / m.cos(right_theta_avg)
+            intercept_right = -(slop_right * right_rho_avg) / \
+                m.cos(right_theta_avg)
 
         for i in range(1, len(lines_drawn_new)):
             if abs(run_x_avg - lines_drawn_new[i][0]) <= x_thresh:
                 count += 1
                 # calculate the new x avg
-                run_x_avg = run_x_avg + ((lines_drawn_new[i][0] - run_x_avg)*1.0) / count
+                run_x_avg = run_x_avg + \
+                    ((lines_drawn_new[i][0] - run_x_avg)*1.0) / count
                 run_y = max(run_y, lines_drawn_new[i][1])
             else:
                 # we need to check if this point is close enough to the intersection point with either of the lane lines
@@ -224,7 +235,8 @@ def img_cb(msg):
                         run_y = y_intersect
                         pts_list.append([run_x_avg, run_y, "l"])
                         """ To plot the magenta lines """
-                        cv2.line(cv_image, (int(run_x_avg), 0), (int(run_x_avg), int(run_y)), (255, 0, 255), 2)
+                        cv2.line(cv_image, (int(run_x_avg), 0),
+                                 (int(run_x_avg), int(run_y)), (255, 0, 255), 2)
                         run_x_avg = lines_drawn_new[i][0]
                         run_y = lines_drawn_new[i][1]
                         count = 1
@@ -235,7 +247,8 @@ def img_cb(msg):
                         run_y = y_intersect
                         pts_list.append([run_x_avg, run_y, "r"])
                         """ To plot the magenta lines """
-                        cv2.line(cv_image, (int(run_x_avg), 0), (int(run_x_avg), int(run_y)), (255, 0, 255), 2)
+                        cv2.line(cv_image, (int(run_x_avg), 0),
+                                 (int(run_x_avg), int(run_y)), (255, 0, 255), 2)
                         run_x_avg = lines_drawn_new[i][0]
                         run_y = lines_drawn_new[i][1]
                         count = 1
@@ -248,7 +261,8 @@ def img_cb(msg):
                 run_y = y_intersect
                 pts_list.append([run_x_avg, run_y, "l"])
                 """ To plot the magenta lines """
-                cv2.line(cv_image, (int(run_x_avg), 0), (int(run_x_avg), int(run_y)), (255, 0, 255), 2)
+                cv2.line(cv_image, (int(run_x_avg), 0),
+                         (int(run_x_avg), int(run_y)), (255, 0, 255), 2)
 
         if consider == False and right_theta_avg != None:
             y_intersect = slop_right * run_x_avg + intercept_right
@@ -257,11 +271,12 @@ def img_cb(msg):
                 run_y = y_intersect
                 pts_list.append([run_x_avg, run_y, "r"])
                 """ To plot the magenta lines """
-                cv2.line(cv_image, (int(run_x_avg), 0), (int(run_x_avg), int(run_y)), (255, 0, 255), 2)
+                cv2.line(cv_image, (int(run_x_avg), 0),
+                         (int(run_x_avg), int(run_y)), (255, 0, 255), 2)
 
         if len(pts_list) != 0:
             # sort this pts_list based on second index
-            pts_list.sort(key = lambda x:x[1], reverse = True)
+            pts_list.sort(key=lambda x: x[1], reverse=True)
 
             prev = pts_list[0]
             # for i in range(1, len(pts_list)):
@@ -272,26 +287,29 @@ def img_cb(msg):
             #     prev = cur
 
             """ This is for plotting the yellow line connecting ends of  the vertical pink lines"""
-            for i in range(0,1):
+            for i in range(0, 1):
                 cur = pts_list[i]
                 prev = (0, int(cur[1]))
                 next = (400, int(cur[1]))
-                cv2.line(cv_image, prev, next, (255, 0, 0), 2) # for plotting line with recently acquired information
+                # for plotting line with recently acquired information
+                cv2.line(cv_image, prev, next, (255, 0, 0), 2)
                 cv_image = update_blocks(cv_image, cur[0], cur[1], cur[2])
 
         # lets also put text about current block length info to debug
         cv_image = puttext(cv_image, str(len(block_array)))
 
-        cv2.namedWindow("HoughLines",cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("HoughLines", 800,800)
+        cv2.namedWindow("HoughLines", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("HoughLines", 800, 800)
         cv2.imshow("HoughLines", cv_image)
         cv2.imshow("masked", masked_img)
         cv2.waitKey(1)
+
 
 def odom_cb(odom_msg):
     global global_x
     pose = odom_msg.pose.pose
     global_x = pose.position.x
+
 
 if __name__ == "__main__":
     try:
@@ -301,7 +319,8 @@ if __name__ == "__main__":
         cv2.destroyAllWindows()
 
         # print number of blocks traversed
-        print("Number of blocks traversed are : {} and a coarse longitudinal estimate is : {} and the variance estimates are: [{}, {}]".format(len(block_array)-1, (len(block_array)-1)*8, (len(block_array)-1)*8 - 8, (len(block_array)-1)*8 + 8))
+        print("Number of blocks traversed are : {} and a coarse longitudinal estimate is : {} and the variance estimates are: [{}, {}]".format(
+            len(block_array)-1, (len(block_array)-1)*8, (len(block_array)-1)*8 - 8, (len(block_array)-1)*8 + 8))
         # print the x of the ground truth
         print("Length according to ground truth is: {}".format(global_x))
     except rospy.ROSInterruptException:

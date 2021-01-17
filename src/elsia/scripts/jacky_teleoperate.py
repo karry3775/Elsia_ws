@@ -9,10 +9,11 @@ ANG_SPEED = 1.5
 CUR_SPEED = 0.0
 ACCEL = 0.0001
 
+
 def cmd_pub():
     rospy.init_node("jacky_teleoperate_node")
-    pub = rospy.Publisher("/jacky/cmd_vel", Twist, queue_size = 10)
-    rate = rospy.Rate(50) # 50 Hz
+    pub = rospy.Publisher("/jacky/cmd_vel", Twist, queue_size=10)
+    rate = rospy.Rate(50)  # 50 Hz
     cmd = Twist()
     while not rospy.is_shutdown():
         print("listening for keys")
@@ -33,11 +34,12 @@ def cmd_pub():
         pub.publish(cmd)
         rate.sleep()
 
+
 def cmd_pub_acc():
     global CUR_SPEED
     rospy.init_node("jacky_acc_teleoperate_node")
-    pub = rospy.Publisher("/jacky/cmd_vel", Twist, queue_size = 10)
-    rate = rospy.Rate(50) # 50 Hz
+    pub = rospy.Publisher("/jacky/cmd_vel", Twist, queue_size=10)
+    rate = rospy.Rate(50)  # 50 Hz
     cmd = Twist()
     while not rospy.is_shutdown():
         print("CUR_SPEED : {}".format(CUR_SPEED))
@@ -61,6 +63,7 @@ def cmd_pub_acc():
 
         pub.publish(cmd)
         # rate.sleep()
+
 
 if __name__ == "__main__":
     try:

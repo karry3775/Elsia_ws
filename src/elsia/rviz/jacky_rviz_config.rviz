@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /Jacky1/Links1
         - /TF1/Frames1
+        - /ground_truth_odom1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 197
   - Class: rviz/Selection
@@ -165,9 +166,9 @@ Visualization Manager:
           Scale: 1
           Value: true
         Value: false
-      Enabled: false
+      Enabled: true
       Keep: 1
-      Name: Odometry
+      Name: rf2o_odom
       Position Tolerance: 0.10000000149011612
       Shape:
         Alpha: 1
@@ -178,10 +179,10 @@ Visualization Manager:
         Head Radius: 0.10000000149011612
         Shaft Length: 1
         Shaft Radius: 0.05000000074505806
-        Value: Axes
-      Topic: /odom
+        Value: Arrow
+      Topic: /odom_rf2o
       Unreliable: false
-      Value: false
+      Value: true
     - Alpha: 1
       Axes Length: 1
       Axes Radius: 0.10000000149011612
@@ -210,11 +211,12 @@ Visualization Manager:
       Visibility:
         Grid: true
         Jacky: true
-        Odometry: true
         Pose: true
         TF: true
         UpwardCam: true
         Value: true
+        ground_truth_odom: true
+        rf2o_odom: true
       Zoom Factor: 1
     - Class: rviz/Camera
       Enabled: false
@@ -227,6 +229,7 @@ Visualization Manager:
       Unreliable: false
       Value: false
       Visibility:
+        "": true
         FrontCam: true
         Grid: true
         Jacky: true
@@ -235,6 +238,40 @@ Visualization Manager:
         TF: true
         Value: true
       Zoom Factor: 1
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: false
+      Enabled: true
+      Keep: 100
+      Name: ground_truth_odom
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 138; 226; 52
+        Head Length: 0.30000001192092896
+        Head Radius: 0.10000000149011612
+        Shaft Length: 1
+        Shaft Radius: 0.05000000074505806
+        Value: Arrow
+      Topic: /odom
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -278,10 +315,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.2703980803489685
+      Pitch: 0.7103973627090454
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.05544900894165
+      Yaw: 4.560446739196777
     Saved: ~
 Window Geometry:
   Displays:
