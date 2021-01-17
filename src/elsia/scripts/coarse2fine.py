@@ -136,12 +136,14 @@ def block_val_cb(msg):
     odom_msg.pose.pose.position.x = odom_depth
     odom_msg.pose.pose.position.y = -ct_dist
     # putting raw aisle odometry as the z value
-    odom_msg.pose.pose.position.z = odom_depth_1
+    odom_msg.pose.pose.position.z = 0.0#odom_depth_1 (we were obviously using this for some analytics, but for lets put the correct value here)
     odom_msg.pose.pose.orientation.x = q[0]
     odom_msg.pose.pose.orientation.y = q[1]
     odom_msg.pose.pose.orientation.z = q[2]
     odom_msg.pose.pose.orientation.w = q[3]
     odom_msg.header.stamp = rospy.Time.now()
+    odom_msg.header.frame_id="/odom"
+    odom_msg.child_frame_id="/aisle_link"
 
     aisle_pub.publish(odom_msg)
 

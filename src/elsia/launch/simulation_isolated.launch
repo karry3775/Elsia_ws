@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
 	<!-- Launch the simulation with correct world arguments -->
-	<!-- options for $(arg world) are mutiple_aisles and warehouse_like -->
-	<arg name="world" default="multiple_aisles" />
+	<!-- options for $(arg world) are isolated_aisles only -->
+	<arg name="world" default="isolated_aisles" />
 	<include file="$(find elsia)/launch/jacky_spawn.launch">
 		<arg name="world_name" value="$(arg world)" />
 	</include>
@@ -25,9 +25,9 @@
 	<node pkg="elsia" type="get_cross_track.py" name="get_cross_track_node" outut="screen"/>
 	<!-- run yaw corrected ododometry node -->
 	<node pkg="elsia" type="laser_odom_corrected_ceil.py" name="laser_odom_corrected_ceil_node" output="screen" />
-	<!-- run the aisle estimator node -->
-	<node pkg="elsia" type="is_corridor_module.py" name="is_corridor_module_node" output="screen"/>
 	<!-- run the block counting code -->
-	<node pkg="elsia" type="switch_and_estimate.py" name="switch_and_estimate_node" output="screen"/>
+	<node pkg="elsia" type="block_counting.py" name="block_counting_node" output="screen"/>
+	<!-- run the coarse2fine conversion code this should publish the odom you need as well for elsia-->
+	<node pkg="elsia" type="coarse2fine.py" name="coarse2fine_node" output="screen"/>
 
 </launch>

@@ -126,6 +126,11 @@ def publishOdom(xlsao, ylsao, yawlsao, xlraw, ylraw, yawlraw):
     t = rospy.Time.now()
 
     sao_odom_msg.header.stamp = t
+    # just adding frame_id and child_frame_id for sao odom
+    # because that's all we care about in rviz, ignoring others 
+    # right now
+    sao_odom_msg.header.frame_id="/odom"
+    sao_odom_msg.child_frame_id="/aisle_link"
     raw_odom_msg.header.stamp = t
 
     corrected_odom_pub.publish(sao_odom_msg)

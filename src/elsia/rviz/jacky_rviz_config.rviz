@@ -4,14 +4,12 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /Status1
-        - /Grid1
         - /Jacky1/Links1
         - /TF1/Frames1
         - /rf2o_odom1/Shape1
         - /ground_truth_odom1/Shape1
         - /rf2o_corrected1/Shape1
+        - /sao_odom1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 197
   - Class: rviz/Selection
@@ -221,6 +219,7 @@ Visualization Manager:
         ground_truth_odom: true
         rf2o_corrected: true
         rf2o_odom: true
+        sao_odom: true
       Zoom Factor: 1
     - Class: rviz/Camera
       Enabled: false
@@ -233,14 +232,15 @@ Visualization Manager:
       Unreliable: false
       Value: false
       Visibility:
-        "": true
         FrontCam: true
         Grid: true
         Jacky: true
         Pose: true
         TF: true
         Value: true
+        aisle_odom: true
         ground_truth_odom: true
+        rf2o_corrected: true
         rf2o_odom: true
       Zoom Factor: 1
     - Angle Tolerance: 0.10000000149011612
@@ -309,6 +309,40 @@ Visualization Manager:
         Shaft Radius: 0.029999999329447746
         Value: Arrow
       Topic: /odom_rf2o_corrected_ceil
+      Unreliable: false
+      Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 100
+      Name: sao_odom
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 238; 238; 236
+        Head Length: 0.10000000149011612
+        Head Radius: 0.05000000074505806
+        Shaft Length: 0.25
+        Shaft Radius: 0.029999999329447746
+        Value: Arrow
+      Topic: /odom_sao
       Unreliable: false
       Value: true
   Enabled: true
