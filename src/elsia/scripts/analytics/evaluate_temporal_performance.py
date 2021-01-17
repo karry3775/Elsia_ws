@@ -60,7 +60,7 @@ def getUpdateInterval():
             rf2o_odom_updates[i] - rf2o_odom_updates[i-1]
             )
 
-    return rf2o_odom_update_interval
+    return sorted(rf2o_odom_update_interval)
     
 
 # function to plot the temporal peformance
