@@ -82,11 +82,11 @@ def laser_odom_cb(msg):
 
     odom_msg.header.stamp = t
     odom_msg.header.frame_id="/odom"
-    odom_msg.header.frame_id="/rf2o_corrected_link"
+    odom_msg.child_frame_id="/rf2o_corrected_link"
 
     odom_msg_raw.header.stamp = t
     odom_msg_raw.header.frame_id="/odom"
-    odom_msg_raw.header.frame_id="/rf2o_uncorrected_link"
+    odom_msg_raw.child_frame_id="/rf2o_uncorrected_link"
 
     corrected_odom_pub.publish(odom_msg)
     raw_odom_pub.publish(odom_msg_raw)

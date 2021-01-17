@@ -6,9 +6,12 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Grid1
         - /Jacky1/Links1
         - /TF1/Frames1
+        - /rf2o_odom1/Shape1
         - /ground_truth_odom1/Shape1
+        - /rf2o_corrected1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 197
   - Class: rviz/Selection
@@ -38,7 +41,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.30000001192092896
-      Cell Size: 0.25
+      Cell Size: 1.5
       Class: rviz/Grid
       Color: 114; 159; 207
       Enabled: true
@@ -167,7 +170,7 @@ Visualization Manager:
           Value: true
         Value: false
       Enabled: true
-      Keep: 1
+      Keep: 100
       Name: rf2o_odom
       Position Tolerance: 0.10000000149011612
       Shape:
@@ -175,10 +178,10 @@ Visualization Manager:
         Axes Length: 1
         Axes Radius: 0.10000000149011612
         Color: 255; 25; 0
-        Head Length: 0.30000001192092896
-        Head Radius: 0.10000000149011612
-        Shaft Length: 1
-        Shaft Radius: 0.05000000074505806
+        Head Length: 0.10000000149011612
+        Head Radius: 0.05000000074505806
+        Shaft Length: 0.25
+        Shaft Radius: 0.029999999329447746
         Value: Arrow
       Topic: /odom_rf2o
       Unreliable: false
@@ -216,6 +219,7 @@ Visualization Manager:
         UpwardCam: true
         Value: true
         ground_truth_odom: true
+        rf2o_corrected: true
         rf2o_odom: true
       Zoom Factor: 1
     - Class: rviz/Camera
@@ -233,10 +237,11 @@ Visualization Manager:
         FrontCam: true
         Grid: true
         Jacky: true
-        Odometry: true
         Pose: true
         TF: true
         Value: true
+        ground_truth_odom: true
+        rf2o_odom: true
       Zoom Factor: 1
     - Angle Tolerance: 0.10000000149011612
       Class: rviz/Odometry
@@ -264,12 +269,46 @@ Visualization Manager:
         Axes Length: 1
         Axes Radius: 0.10000000149011612
         Color: 138; 226; 52
-        Head Length: 0.30000001192092896
-        Head Radius: 0.10000000149011612
-        Shaft Length: 1
-        Shaft Radius: 0.05000000074505806
+        Head Length: 0.10000000149011612
+        Head Radius: 0.05000000074505806
+        Shaft Length: 0.25
+        Shaft Radius: 0.029999999329447746
         Value: Arrow
       Topic: /odom
+      Unreliable: false
+      Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 100
+      Name: rf2o_corrected
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 114; 159; 207
+        Head Length: 0.10000000149011612
+        Head Radius: 0.05000000074505806
+        Shaft Length: 0.25
+        Shaft Radius: 0.029999999329447746
+        Value: Arrow
+      Topic: /odom_rf2o_corrected_ceil
       Unreliable: false
       Value: true
   Enabled: true
@@ -300,25 +339,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.592089653015137
+      Distance: 39.88328552246094
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.17072485387325287
-        Y: 0.05803397670388222
-        Z: -0.09351806342601776
+        X: 6.524345397949219
+        Y: -0.03791282698512077
+        Z: -0.08716550469398499
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7103973627090454
+      Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.560446739196777
+      Yaw: 3.1505112648010254
     Saved: ~
 Window Geometry:
   Displays:
