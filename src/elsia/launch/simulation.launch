@@ -1,24 +1,26 @@
-<?xml version = "1.0" encoding = "UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <!-- Launch the simulation with correct world arguments -->
-  <!-- options for $(arg world) are isolated_aisles, mutiple_aisles and warehouse_like-->
-  <arg name="world" default="isolated_aisles"/>
-  <include file="$(find elsia)/launch/jacky_spawn.launch">
-    <arg name="world_name" value="$(arg world)"/>
-  </include>
-
-  <!-- Launch the rviz file -->
-  <include file="$(find elsia)/launch/jacky_rviz.launch"/>
-
-  <!-- Launch rf2o -->
-  <include file="$(find rf2o_laser_odometry)/launch/rf2o_laser_odometry.launch">
-    <arg name="laser_scan_topic" default="/jacky/laser/scan"/>
-    <arg name="odom_topic" default="/odom_rf2o"/>
-    <arg name="publish_tf" default="false"/>
-    <arg name="base_frame_id" default="/base_link"/>
-    <arg name="odom_frame_id" default="/odom"/>
-    <arg name="init_pose_from_topic" default=""/>
-    <arg name="freq" default="6.0"/>
-    <arg name="verbose" default="true"/>
-  </include>
+	<!-- Launch the simulation with correct world arguments -->
+	<!-- options for $(arg world) are isolated_aisles, mutiple_aisles and warehouse_like -->
+	<arg name="world" default="isolated_aisles" />
+	<include file="$(find elsia)/launch/jacky_spawn.launch">
+		<arg name="world_name" value="$(arg world)" />
+	</include>
+	<!-- Launch the rviz file -->
+	<include file="$(find elsia)/launch/jacky_rviz.launch" />
+	<!-- Launch rf2o -->
+	<include file="$(find rf2o_laser_odometry)/launch/rf2o_laser_odometry.launch">
+		<arg name="laser_scan_topic" default="/jacky/laser/scan" />
+		<arg name="odom_topic" default="/odom_rf2o" />
+		<arg name="publish_tf" default="false" />
+		<arg name="base_frame_id" default="/base_link" />
+		<arg name="odom_frame_id" default="/odom" />
+		<arg name="init_pose_from_topic" default="" />
+		<arg name="freq" default="6.0" />
+		<arg name="verbose" default="true" />
+	</include>
+	<!-- run absolute orienation node -->
+	<node pkg="elsia" type="get_abs_ori.py" name="get_abs_ori_node" output="screen" />
+	<!-- run yaw corrected ododometry node -->
+	<node pkg="elsia" type="laser_odom_corrected_ceil.py" name="laser_odom_corrected_ceil_node" output="screen" />
 </launch>

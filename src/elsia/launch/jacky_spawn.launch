@@ -1,27 +1,22 @@
-<?xml version = "1.0" encoding = "UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <launch>
-
-  <param name = "robot_description" command = "$(find xacro)/xacro '$(find elsia)/urdf/jacky.xacro'"/>
-  <arg name = "x" default = "0"/>
-  <arg name = "y" default = "0"/>
-  <arg name = "z" default = "1.0"/>
-
-  <arg name = "world_name" default = "isolated_aisles"/> <!-- options are mutiple_aisles and warehouse_like-->
-
-  <arg name = "debug" default = "false"/>
-  <arg name = "gui" default = "true"/>
-  <arg name = "pause" default = "true"/>
-  <arg name = "world" default = "$(find elsia)/world/$(arg world_name)_environment.world"/>
-
-  <!-- add the gazebo launcher -->
-  <include file = "$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name = "world_name" value = "$(arg world)"/>
-    <arg name = "debug" value = "$(arg debug)"/>
-    <arg name = "paused" value = "$(arg pause)"/>
-    <arg name = "gui" value = "$(arg gui)"/>
-    <arg name = "use_sim_time" value = "true"/>
-  </include>
-
-  <node name = "jacky_spawn" pkg = "gazebo_ros" type = "spawn_model" output = "screen"
-    args = "-urdf -param robot_description -model jacky -x $(arg x) -y $(arg y) -z $(arg z)"/>
+	<param name="robot_description" command="$(find xacro)/xacro '$(find elsia)/urdf/jacky.xacro'" />
+	<arg name="x" default="0" />
+	<arg name="y" default="0" />
+	<arg name="z" default="1.0" />
+	<arg name="world_name" default="isolated_aisles" />
+	<!-- options are mutiple_aisles and warehouse_like -->
+	<arg name="debug" default="false" />
+	<arg name="gui" default="true" />
+	<arg name="pause" default="true" />
+	<arg name="world" default="$(find elsia)/world/$(arg world_name)_environment.world" />
+	<!-- add the gazebo launcher -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(arg world)" />
+		<arg name="debug" value="$(arg debug)" />
+		<arg name="paused" value="$(arg pause)" />
+		<arg name="gui" value="$(arg gui)" />
+		<arg name="use_sim_time" value="true" />
+	</include>
+	<node name="jacky_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model jacky -x $(arg x) -y $(arg y) -z $(arg z)" />
 </launch>
